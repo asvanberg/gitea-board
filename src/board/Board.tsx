@@ -60,6 +60,15 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
       return 0;
     });
 
+  const done = pullRequests
+    .filter((pr) => pr.state === "closed")
+    .filter((pr) => pr.pull_request?.merged_at) // only merged PRs, not just closed
+    .filter(
+      (pr) =>
+        !since ||
+        (pr.pull_request?.merged_at && pr.pull_request.merged_at >= since),
+    );
+
   return (
     <div className={"board"}>
       <Column header={"New"} issues={newIssues} />
@@ -76,10 +85,7 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
           (pr) => pr.state === "open" && !pr.pull_request?.draft,
         )}
       />
-      <Column
-        header={"Done"}
-        issues={pullRequests.filter((pr) => pr.state === "closed")}
-      />
+      <Column header={"Done"} issues={done} />
     </div>
   );
 }
