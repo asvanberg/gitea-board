@@ -19,7 +19,7 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
       .findIssues({
         owner: owner,
         repo: repo,
-        state: "all",
+        state: "open",
         limit: 1000,
         type: "issues",
       })
