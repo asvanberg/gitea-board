@@ -1,0 +1,79 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --profile-picture-size: 24px;
+  --card-shadow-size: 3px;
+  --card-shadow-color: grey;
+  --card-header-bg-color: #646464;
+}
+
+.board {
+  display: flex;
+  gap: 1em;
+  margin: 0 1em;
+}
+
+.profile-picture {
+  height: var(--profile-picture-size);
+  width: var(--profile-picture-size);
+}
+
+.column {
+  /*flex: 1 1 0;*/
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.card {
+  max-width: 20em;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  box-shadow: var(--card-shadow-size) var(--card-shadow-size)
+    var(--card-shadow-size) var(--card-shadow-color);
+  position: relative;
+  overflow: hidden;
+
+  h3 {
+    margin: 0;
+    border-bottom: 1px solid #e1e4e8;
+    background-color: var(--card-header-bg-color);
+    padding: 0 0.3em;
+  }
+
+  .body {
+    padding: 0.5em;
+  }
+
+  .profile-picture {
+    position: absolute;
+    bottom: 0.3em;
+    right: 0.3em;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+    --card-header-bg-color: #d9d9d9;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
