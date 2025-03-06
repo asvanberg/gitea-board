@@ -1,5 +1,5 @@
 import { Fetcher } from "openapi-typescript-fetch";
-import { paths } from "./lib/api/v1";
+import { definitions, paths } from "./lib/api/v1";
 
 const client = Fetcher.for<paths>();
 
@@ -9,6 +9,8 @@ client.configure({
 
 export type Issue =
   paths["/repos/{owner}/{repo}/issues"]["get"]["responses"]["200"]["schema"][0];
+
+export type Label = definitions["Label"];
 
 export const findIssues = client
   .path("/repos/{owner}/{repo}/issues")

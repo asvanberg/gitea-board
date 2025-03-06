@@ -64,6 +64,44 @@
   }
 }
 
+ul.labels {
+  display: flex;
+  gap: 0.5em;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.label {
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+
+  --shadow-size: 0.1em;
+  --shadow-blur: 0.2em;
+  --dark-bg-text: #fff;
+  --light-bg-text: #000;
+
+  &.dark {
+    color: var(--dark-bg-text);
+    text-shadow: var(--light-bg-text) var(--shadow-size) var(--shadow-size)
+      var(--shadow-blur);
+  }
+  &.light {
+    color: var(--light-bg-text);
+    text-shadow:
+      var(--dark-bg-text) var(--shadow-size) var(--shadow-size)
+        var(--shadow-blur),
+      var(--dark-bg-text) var(--shadow-size) calc(-1 * var(--shadow-size))
+        var(--shadow-blur),
+      var(--dark-bg-text) calc(-1 * var(--shadow-size)) var(--shadow-size)
+        var(--shadow-blur),
+      var(--dark-bg-text) calc(-1 * var(--shadow-size))
+        calc(-1 * var(--shadow-size)) var(--shadow-blur);
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

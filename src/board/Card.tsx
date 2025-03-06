@@ -1,4 +1,5 @@
 import * as gitea from "../gitea.ts";
+import Label from "./Label.tsx";
 
 export type CardProps = {
   issue: gitea.Issue;
@@ -22,6 +23,15 @@ export default function Card({ issue }: CardProps) {
             src={issue.assignee.avatar_url}
             alt={issue.assignee.login}
           />
+        )}
+        {issue.labels && (
+          <ul className={"labels"}>
+            {issue.labels.map((label) => (
+              <li key={label.id}>
+                <Label label={label} />
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </div>
