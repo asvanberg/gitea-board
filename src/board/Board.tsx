@@ -5,11 +5,11 @@ import Column from "./Column.tsx";
 export type BoardProps = {
   owner: string;
   repo: string;
-  since?: Date;
+  since?: string;
 };
 
 export function Board({ owner, repo, since: sinceDate }: BoardProps) {
-  const since = sinceDate?.toISOString();
+  const since = sinceDate ? `${sinceDate}T00:00:00Z` : undefined;
 
   const [issues, setIssues] = useState<gitea.Issue[]>([]);
   const [pullRequests, setPullRequests] = useState<gitea.Issue[]>([]);

@@ -1,22 +1,22 @@
 import { Board } from "./board/Board.tsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import * as gitea from "./gitea.ts";
 
 function App() {
   const owner = import.meta.env.VITE_GITEA_OWNER;
   const repo = import.meta.env.VITE_GITEA_REPO;
 
-  const since = useMemo(() => {
+  const [since, setSince] = useState(() => {
     const now = new Date();
     now.setDate(now.getDate() - 6);
-    now.setHours(0, 0, 0, 0);
-    return now;
-  }, []);
+    now.setUTCHours(0, 0, 0, 0);
+    return now.toISOString().substring(0, 10);
+  });
 
   const [repository, setRepository] = useState<gitea.Repository | undefined>();
 
   useEffect(() => {
-    document.title = `${owner}/${repo} since ${since.toDateString()}`;
+    document.title = `${owner}/${repo} since ${since}`;
   }, [owner, repo, since]);
 
   useEffect(() => {
@@ -38,7 +38,14 @@ function App() {
             <a href={repository.html_url}>{repository.full_name}</a>
           )}
         </h1>
-        <span>Since {since.toDateString()}</span>
+        Since
+        <input
+          type="date"
+          value={since}
+          onInput={(event) => {
+            setSince((event.target as HTMLInputElement).value);
+          }}
+        />
       </header>
       <Board owner={owner} repo={repo} since={since} />
     </>
