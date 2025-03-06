@@ -14,6 +14,8 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
   const [issues, setIssues] = useState<gitea.Issue[]>([]);
   const [pullRequests, setPullRequests] = useState<gitea.Issue[]>([]);
 
+  const [unreleased, setUnreleased] = useState<number[]>([]);
+
   useEffect(() => {
     void gitea
       .findIssues({
@@ -43,6 +45,29 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
       });
   }, [owner, repo, since]);
 
+  useEffect(() => {
+    void gitea
+      .compareCommits({
+        owner: owner,
+        repo: repo,
+        basehead: "master...develop",
+      })
+      .then(({ data: diff }) => {
+        for (const commit of diff.commits ?? []) {
+          if (!commit.sha) continue;
+
+          void gitea
+            .getMergedPr({ owner, repo, sha: commit.sha })
+            .then(({ data }) => {
+              if (data.number) {
+                const n = data.number;
+                setUnreleased((unreleased) => [...unreleased, n]);
+              }
+            });
+        }
+      });
+  }, [owner, repo]);
+
   const newIssues = issues.filter((issue) => isNew(issue));
 
   const todo = issues
@@ -60,7 +85,7 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
       return 0;
     });
 
-  const done = pullRequests
+  const mergedPRs = pullRequests
     .filter((pr) => pr.state === "closed")
     .filter((pr) => pr.pull_request?.merged_at) // only merged PRs, not just closed
     .filter(
@@ -68,6 +93,14 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
         !since ||
         (pr.pull_request?.merged_at && pr.pull_request.merged_at >= since),
     );
+
+  const done = mergedPRs.filter(
+    (pr) => pr.number && unreleased.includes(pr.number),
+  );
+
+  const released = mergedPRs.filter(
+    (pr) => pr.number && !unreleased.includes(pr.number),
+  );
 
   return (
     <div className={"board"}>
@@ -86,6 +119,7 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
         )}
       />
       <Column header={"Done"} issues={done} />
+      <Column header={"Released"} issues={released} />
     </div>
   );
 }

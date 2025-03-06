@@ -24,3 +24,13 @@ export const getRepo = client
   .path("/repos/{owner}/{repo}")
   .method("get")
   .create();
+
+export const compareCommits = client
+  .path("/repos/{owner}/{repo}/compare/{basehead}")
+  .method("get")
+  .create();
+
+export const getMergedPr = client
+  .path("/repos/{owner}/{repo}/commits/{sha}/pull")
+  .method("get")
+  .create();
