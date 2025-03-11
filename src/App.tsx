@@ -1,12 +1,13 @@
 import { Board } from "./board/Board.tsx";
 import { useEffect, useState } from "react";
 import * as gitea from "./gitea.ts";
+import useQueryParam from "./hooks/useQueryParam.ts";
 
 function App() {
   const owner = import.meta.env.VITE_GITEA_OWNER;
   const repo = import.meta.env.VITE_GITEA_REPO;
 
-  const [since, setSince] = useState(() => {
+  const [since, setSince] = useQueryParam("since", () => {
     const now = new Date();
     now.setDate(now.getDate() - 6);
     now.setUTCHours(0, 0, 0, 0);
