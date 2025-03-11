@@ -34,3 +34,7 @@ export const getMergedPr = client
   .path("/repos/{owner}/{repo}/commits/{sha}/pull")
   .method("get")
   .create();
+
+export function getDueDate(issue: Issue): string | undefined {
+  return issue.due_date ?? issue.milestone?.due_on;
+}

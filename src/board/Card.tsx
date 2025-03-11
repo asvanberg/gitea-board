@@ -6,16 +6,16 @@ export type CardProps = {
 };
 
 export default function Card({ issue }: CardProps) {
+  const dueDate = gitea.getDueDate(issue);
+
   return (
     <div className={"card"}>
       <h3>#{issue.number}</h3>
       <div className={"body"}>
         <a href={issue.html_url}>{issue.title}</a>
         <br />
-        {issue.milestone?.due_on && (
-          <span className={"due-date"}>
-            Due on {issue.milestone.due_on.substring(0, 10)}
-          </span>
+        {dueDate && (
+          <span className={"due-date"}>Due on {dueDate.substring(0, 10)}</span>
         )}
         {issue.assignee && (
           <img

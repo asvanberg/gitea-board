@@ -75,11 +75,14 @@ export function Board({ owner, repo, since: sinceDate }: BoardProps) {
     .filter((issue) => !issue.assignees)
     .filter((issue) => !isNew(issue))
     .sort((a, b) => {
-      if (a.milestone?.due_on && b.milestone?.due_on) {
-        return a.milestone.due_on < b.milestone.due_on ? -1 : 1;
-      } else if (a.milestone) {
+      const aDueDate = gitea.getDueDate(a);
+      const bDueDate = gitea.getDueDate(b);
+
+      if (aDueDate && bDueDate) {
+        return aDueDate < bDueDate ? -1 : 1;
+      } else if (aDueDate) {
         return -1;
-      } else if (b.milestone) {
+      } else if (bDueDate) {
         return 1;
       }
       return 0;
